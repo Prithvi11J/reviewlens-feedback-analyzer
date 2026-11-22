@@ -18,7 +18,8 @@ if state.report_markdown() is None:
             state.set_report(report.markdown, report.insights)
             st.rerun()
     except ConfigError:
-        st.warning("Add an OpenAI API key to .env to write reports for your own data.", icon=":material/key:")
+        st.info("Writing a new report needs an OpenAI key, so it only works when you run ReviewLens on your "
+                f"own computer. [See the setup guide]({state.REPO_URL}#quick-start).", icon=":material/info:")
 else:
     md = state.report_markdown()
     # Shrink headings by two levels so the report sits inside the page's own title.

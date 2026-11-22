@@ -73,6 +73,18 @@ def test_edited_draft_is_what_gets_recorded():
     assert at.session_state["replied"][review_id] == "Sorry about this. - Team PJ"
 
 
+def test_public_demo_without_api_key(monkeypatch):
+    """Like Streamlit Cloud with no secret set: no uploader, a friendly note instead of an error."""
+    monkeypatch.setenv("OPENAI_API_KEY", "")
+    at = start()
+    at.switch_page("app_pages/upload.py").run()
+    assert not at.exception and not at.error
+    assert len(at.get("file_uploader")) == 0
+    assert any("pre-analysed week" in i.value for i in at.info)
+    at.switch_page("app_pages/briefing.py").run()  # the demo itself still works fully
+    assert not at.exception
+
+
 def test_insights_outlet_filter():
     at = start()
     at.switch_page("app_pages/insights.py").run()

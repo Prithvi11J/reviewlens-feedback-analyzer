@@ -10,7 +10,7 @@
 ![LangChain](https://img.shields.io/badge/LangChain-structured%20output-1f4d33)
 ![OpenAI](https://img.shields.io/badge/OpenAI-gpt--5.4--mini-1f4d33)
 ![Streamlit](https://img.shields.io/badge/Streamlit-1.67-1f4d33)
-![Tests](https://img.shields.io/badge/tests-56%20passing-b98428)
+![Tests](https://img.shields.io/badge/tests-57%20passing-b98428)
 ![License](https://img.shields.io/badge/license-MIT-b98428)
 
 
@@ -154,7 +154,7 @@ Reproduce it: `python scripts/make_test_data.py`, `python scripts/run_batch.py` 
 python -m pytest
 ```
 
-56 tests run in about 20 seconds with no API calls: schema rules, CSV validation, batch failure handling with a fake chain, exact statistics, percentages that always sum to 100, hotspots and the chance test, report assembly and retries, invented-number detection, reply-queue order, and headless tests of every app page.
+57 tests run in about 20 seconds with no API calls: schema rules, CSV validation, batch failure handling with a fake chain, exact statistics, percentages that always sum to 100, hotspots and the chance test, report assembly and retries, invented-number detection, reply-queue order, headless tests of every app page, and the no-key public demo.
 
 ## Project structure
 

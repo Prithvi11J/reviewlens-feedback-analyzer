@@ -18,6 +18,7 @@ from reviewlens.report import WeeklyInsights
 
 ROOT = Path(__file__).resolve().parents[1]
 QUEUE_PAGE_SIZE = 10  # reply cards shown at a time
+REPO_URL = "https://github.com/Prithvi11J/reviewlens-feedback-analyzer"
 DEMO_DIR = ROOT / "data" / "demo"
 SAMPLE_CSV = ROOT / "data" / "sample" / "reviews_week47.csv"
 
