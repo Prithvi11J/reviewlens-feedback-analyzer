@@ -1,0 +1,19 @@
+# ReviewLens dependencies (tested on Python 3.12)
+# Versions are pinned so anyone cloning the repo gets the exact same setup.
+
+# LLM pipeline
+langchain==1.5.2
+langchain-core==1.8.4
+langchain-openai==1.8.5
+pydantic==2.14.4
+
+# Data + UI
+pandas==3.1.1
+streamlit==1.67.0
+plotly==7.1.0
+
+# Config
+python-dotenv==1.2.4
+
+# Testing
+pytest==9.2.0
