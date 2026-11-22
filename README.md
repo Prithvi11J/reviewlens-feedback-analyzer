@@ -13,7 +13,13 @@
 ![Tests](https://img.shields.io/badge/tests-56%20passing-b98428)
 ![License](https://img.shields.io/badge/license-MIT-b98428)
 
-<a href="docs/reviewlens_demo.mp4"><img src="docs/demo_thumbnail.png" alt="Watch the 80-second demo" width="720"></a>
+
+
+https://github.com/user-attachments/assets/1c121c9e-e0d9-48d5-93db-09f9b3594848
+
+
+
+
 
 *Click the image to watch the 80-second demo (voice-over and captions).*
 
