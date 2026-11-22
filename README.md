@@ -14,14 +14,9 @@
 ![License](https://img.shields.io/badge/license-MIT-b98428)
 
 
-
 https://github.com/user-attachments/assets/1c121c9e-e0d9-48d5-93db-09f9b3594848
 
-
-
-
-
-*Click the image to watch the 80-second demo (voice-over and captions).*
+*80-second demo with voice-over and captions. Turn the sound on.*
 
 </div>
 
