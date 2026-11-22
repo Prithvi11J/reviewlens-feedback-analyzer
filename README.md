@@ -13,6 +13,9 @@
 ![Tests](https://img.shields.io/badge/tests-57%20passing-b98428)
 ![License](https://img.shields.io/badge/license-MIT-b98428)
 
+[![Open the live app](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://reviewlens-demo.streamlit.app)
+
+**[Try it live: reviewlens-demo.streamlit.app](https://reviewlens-demo.streamlit.app)** · no sign-up, opens on PJ's demo week
 
 https://github.com/user-attachments/assets/1c121c9e-e0d9-48d5-93db-09f9b3594848
 
@@ -45,7 +48,9 @@ Every review is tagged with **sentiment, category, urgency, language, a one-line
 
 ## Quick start
 
-Requires **Python 3.12** and an [OpenAI API key](https://platform.openai.com/api-keys). No key? The app opens on a pre-analysed demo week, so you can explore everything except analysing new data.
+Just want to look around? **[Open the live demo](https://reviewlens-demo.streamlit.app)**: it runs on the pre-analysed demo week, so there's nothing to install. (If it's been idle, Streamlit shows a wake-up button; give it about 30 seconds.)
+
+To run it yourself and analyse your own reviews, you need **Python 3.12** and an [OpenAI API key](https://platform.openai.com/api-keys).
 
 ```powershell
 git clone https://github.com/Prithvi11J/reviewlens-feedback-analyzer.git
