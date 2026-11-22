@@ -30,6 +30,19 @@ def get_api_key() -> str:
     return key
 
 
+DEFAULT_RESTAURANT = "PJ's"
+DEFAULT_RESTAURANT_DESCRIPTION = "a Chettinad restaurant with three outlets in Coimbatore, Tamil Nadu"
+
+
+def get_restaurant_name() -> str:
+    """The business the reviews are about. Change it in .env to reuse ReviewLens for another restaurant."""
+    return os.getenv("RESTAURANT_NAME", "").strip() or DEFAULT_RESTAURANT
+
+
+def get_restaurant_description() -> str:
+    return os.getenv("RESTAURANT_DESCRIPTION", "").strip() or DEFAULT_RESTAURANT_DESCRIPTION
+
+
 def get_model_name() -> str:
     return os.getenv("OPENAI_MODEL", DEFAULT_MODEL).strip() or DEFAULT_MODEL
 

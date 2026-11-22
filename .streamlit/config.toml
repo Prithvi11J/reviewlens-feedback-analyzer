@@ -1,0 +1,52 @@
+[client]
+# "minimal" hides Streamlit's developer menu and Deploy button, so the app looks like a product.
+toolbarMode = "minimal"
+
+# PJ's brand theme for ReviewLens.
+# Colours come from a Chettinad kitchen: banana leaf, turmeric, chilli, rice and brass.
+# [theme.light] and [theme.dark] are both defined, so viewers can switch in Settings.
+
+[theme]
+headingFont = "Fraunces:https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&display=swap, serif"
+font = "'DM Sans':https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap, sans-serif"
+# Code blocks are used for reply drafts (they come with a built-in copy button),
+# so they use the body font instead of a monospace one.
+codeFont = "'DM Sans':https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap, sans-serif"
+baseRadius = "0.6rem"
+showSidebarBorder = false
+
+[theme.light]
+primaryColor = "#1f5d3a"              # banana leaf
+backgroundColor = "#fbf7ef"           # rice cream
+secondaryBackgroundColor = "#f3ebda"
+textColor = "#2b2118"                 # roasted coffee
+borderColor = "#e4d8bf"
+linkColor = "#1f5d3a"
+redColor = "#b23a2a"                  # chilli
+orangeColor = "#b96f12"               # turmeric, darkened for text contrast
+yellowColor = "#e0a526"               # turmeric
+greenColor = "#1f5d3a"
+blueColor = "#0f78a8"                 # peacock
+dataframeHeaderBackgroundColor = "#f3ebda"
+
+[theme.light.sidebar]
+backgroundColor = "#f3ebda"
+secondaryBackgroundColor = "#fbf7ef"
+
+[theme.dark]
+primaryColor = "#e0a526"              # turmeric reads better than green on a dark surface
+backgroundColor = "#17130e"
+secondaryBackgroundColor = "#221c14"
+textColor = "#f1e8d6"
+borderColor = "#3a3024"
+linkColor = "#e9b949"
+redColor = "#e0654f"
+orangeColor = "#e9a04a"
+yellowColor = "#e9b949"
+greenColor = "#5fae7f"
+blueColor = "#3d9cbf"
+dataframeHeaderBackgroundColor = "#221c14"
+
+[theme.dark.sidebar]
+backgroundColor = "#221c14"
+secondaryBackgroundColor = "#17130e"

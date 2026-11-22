@@ -10,6 +10,9 @@ from dataclasses import dataclass, field
 import pandas as pd
 
 REQUIRED_COLUMNS = ["review_id", "date", "platform", "rating", "review_text"]
+# Extra columns we use when present, but never require (the brief's format has only the 5 above).
+# `outlet` lets a multi-branch restaurant compare its branches.
+OPTIONAL_COLUMNS = ["outlet"]
 
 
 class InvalidCSVError(ValueError):
@@ -42,11 +45,12 @@ def validate_reviews(df: pd.DataFrame) -> tuple[pd.DataFrame, ValidationReport]:
         )
 
     report = ValidationReport(rows_in_file=len(df))
-    df = df[REQUIRED_COLUMNS]
+    df = df[REQUIRED_COLUMNS + [c for c in OPTIONAL_COLUMNS if c in df.columns]]
 
     df["review_id"] = df["review_id"].astype(str).str.strip()
     df["review_text"] = df["review_text"].fillna("").astype(str).str.strip()
-    df["platform"] = df["platform"].fillna("Unknown").astype(str).str.strip()
+    for col in ["platform", *[c for c in OPTIONAL_COLUMNS if c in df.columns]]:
+        df[col] = df[col].fillna("Unknown").astype(str).str.strip()
 
     empty = df["review_text"] == ""
     report.empty_text_dropped = int(empty.sum())

@@ -1,0 +1,99 @@
+{
+  "headline": "Food safety and order-handling issues were the main risks this week, with Peelamedu driving most of the negative feedback.",
+  "top_complaints": [
+    {
+      "category": "food_quality",
+      "title": "Stale and contaminated dishes",
+      "insight": "Customers most often complained about stale mutton, spoiled curry or kuzhambu, and hair found in food, with several serious safety reports tied to specific outlets."
+    },
+    {
+      "category": "delivery",
+      "title": "Wrong and missing orders",
+      "insight": "Delivery complaints focused on orders marked delivered but not received, wrong items sent, and late food, with Swiggy standing out as the main platform."
+    },
+    {
+      "category": "app",
+      "title": "Payment failures at checkout",
+      "insight": "Customers reported failed payments that were still debited, plus checkout and support problems, with Peelamedu appearing most often in these app complaints."
+    }
+  ],
+  "top_praise": [
+    {
+      "category": "food_quality",
+      "title": "Homely, tasty dishes",
+      "insight": "Customers praised the kothu parotta, lunch meals, nattu kozhi curry, and Chettinad chicken biryani for strong flavour and a homely taste."
+    },
+    {
+      "category": "delivery",
+      "title": "Fast hot deliveries",
+      "insight": "Customers praised quick delivery, including orders arriving hot and on time even in the rain."
+    },
+    {
+      "category": "staff",
+      "title": "Polite helpful service",
+      "insight": "Customers praised friendly, quick, and helpful service, with RS Puram mentioned most often in the positive staff feedback."
+    }
+  ],
+  "urgent_clusters": [
+    {
+      "title": "Hair found in food at Gandhipuram",
+      "review_ids": [
+        "R-2037",
+        "R-2167",
+        "R-2227",
+        "R-2065",
+        "R-2079"
+      ],
+      "why_it_matters": "This is a repeated food-safety issue that can quickly damage trust and create serious reputational risk."
+    },
+    {
+      "title": "Stale mutton biryani at RS Puram",
+      "review_ids": [
+        "R-2133",
+        "R-2161",
+        "R-2035",
+        "R-2186"
+      ],
+      "why_it_matters": "Repeated reports about spoiled meat suggest a serious kitchen-quality control problem that needs immediate attention."
+    },
+    {
+      "title": "Fish fry illness at Peelamedu",
+      "review_ids": [
+        "R-2235",
+        "R-2239",
+        "R-2240",
+        "R-2236",
+        "R-2237",
+        "R-2238"
+      ],
+      "why_it_matters": "Several nearby reports describe illness after the same dish, which is the most serious risk and needs urgent investigation."
+    },
+    {
+      "title": "Payment debited but order failed",
+      "review_ids": [
+        "R-2069",
+        "R-2155",
+        "R-2048",
+        "R-2110",
+        "R-2019",
+        "R-2076"
+      ],
+      "why_it_matters": "Customers who lose money at checkout are likely to escalate, request refunds, and avoid ordering again."
+    },
+    {
+      "title": "Marked delivered but not received",
+      "review_ids": [
+        "R-2032",
+        "R-2168",
+        "R-2110",
+        "R-2114"
+      ],
+      "why_it_matters": "Repeated missing-order cases create refund pressure and make the delivery process look unreliable."
+    }
+  ],
+  "action_items": [
+    "Inspect food handling and prep checks at Gandhipuram, RS Puram, and Peelamedu before the next service and remove any dish linked to hair, spoilage, or illness.",
+    "Audit fish fry prep and storage at Peelamedu immediately, then stop serving that item until the issue is traced and corrected.",
+    "Work with Swiggy and the in-house team to fix failed payments and marked-delivered orders, and close each refund case the same day."
+  ]
+}

@@ -39,8 +39,10 @@ def analyze_reviews(
         chain = build_review_chain()
     chain = chain.with_retry(stop_after_attempt=3)
 
+    has_outlet = "outlet" in df.columns
     inputs = [
-        {"platform": row.platform, "rating": _fmt_rating(row.rating), "review_text": row.review_text}
+        {"platform": row.platform, "rating": _fmt_rating(row.rating), "review_text": row.review_text,
+         **({"outlet": row.outlet} if has_outlet else {})}
         for row in df.itertuples(index=False)
     ]
 

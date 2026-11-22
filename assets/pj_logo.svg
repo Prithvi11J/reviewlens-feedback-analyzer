@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 280 64" role="img" aria-label="PJ's Chettinad Kitchen">
+  <defs>
+    <linearGradient id="gold" x1="0" y1="0" x2="0.35" y2="1">
+      <stop offset="0" stop-color="#fbe7a6"/><stop offset="0.45" stop-color="#e2b350"/>
+      <stop offset="0.75" stop-color="#b98428"/><stop offset="1" stop-color="#f0cd78"/>
+    </linearGradient>
+    <!-- A deeper gold for the wordmark, so it stays readable on the light cream background too -->
+    <linearGradient id="goldText" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#c9952f"/><stop offset="0.55" stop-color="#a7771f"/><stop offset="1" stop-color="#c9952f"/>
+    </linearGradient>
+    <g id="crown">
+      <path d="M3.5 21.5 L1 7 Q5.75 17 10.5 4 Q15.25 17 20 0.8 Q24.75 17 29.5 4 Q34.25 17 39 7 L36.5 21.5 Z"/>
+      <rect x="2.6" y="21.8" width="34.8" height="4.4" rx="1.1"/>
+      <circle cx="1" cy="6.2" r="1.8"/><circle cx="10.5" cy="3.2" r="1.8"/><circle cx="20" cy="-0.6" r="2.2"/>
+      <circle cx="29.5" cy="3.2" r="1.8"/><circle cx="39" cy="6.2" r="1.8"/>
+    </g>
+  </defs>
+  <!-- Crest (same as pj_mark.svg) -->
+  <circle cx="32" cy="32" r="31" fill="url(#gold)"/>
+  <circle cx="32" cy="32" r="29.4" fill="#173d28"/>
+  <circle cx="32" cy="32" r="26.6" fill="none" stroke="url(#gold)" stroke-width="0.7"/>
+  <text x="25.5" y="50" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+        font-size="27" font-weight="700" fill="url(#gold)">P</text>
+  <text x="40.5" y="50" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif"
+        font-size="27" font-weight="700" fill="url(#gold)">J</text>
+  <g transform="translate(27.5 26) rotate(14) scale(0.42) translate(-20 -13)"
+     fill="url(#gold)" stroke="#7a5518" stroke-width="0.9" stroke-linejoin="round">
+    <use href="#crown" xlink:href="#crown"/>
+  </g>
+  <!-- Wordmark -->
+  <text x="76" y="30" font-family="'Didot', 'Bodoni MT', Georgia, 'Times New Roman', serif" font-size="22"
+        font-weight="700" fill="url(#goldText)" letter-spacing="1.5">PJ’s</text>
+  <line x1="77" y1="37" x2="255" y2="37" stroke="#b5862a" stroke-width="0.8"/>
+  <text x="77" y="52" font-family="Georgia, 'Times New Roman', serif" font-size="11.5" fill="url(#goldText)"
+        letter-spacing="3.2">CHETTINAD KITCHEN</text>
+</svg>

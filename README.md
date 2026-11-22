@@ -1,45 +1,50 @@
-# ReviewLens: Customer Feedback Analyzer
+<div align="center">
 
-> Turn a week of raw customer reviews (English, Tamil, Tanglish) into tagged, prioritised insights and a weekly report a manager can act on in five minutes.
+<img src="assets/pj_logo.svg" alt="PJ's Chettinad Kitchen" width="320">
 
-![ReviewLens dashboard](docs/dashboard.png)
+# ReviewLens
 
-Built with **LangChain**, **OpenAI**, **pandas** and **Streamlit** as the Gen AI track project of the Social Eagle AI Academy (intermediate level).
+**Turn a week of restaurant reviews (English, Tamil and Tanglish) into a 5-minute Monday briefing, a prioritised reply queue and a weekly report.**
+
+![Python](https://img.shields.io/badge/Python-3.12-1f4d33)
+![LangChain](https://img.shields.io/badge/LangChain-structured%20output-1f4d33)
+![OpenAI](https://img.shields.io/badge/OpenAI-gpt--5.4--mini-1f4d33)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.67-1f4d33)
+![Tests](https://img.shields.io/badge/tests-56%20passing-b98428)
+![License](https://img.shields.io/badge/license-MIT-b98428)
+
+<a href="docs/reviewlens_demo.mp4"><img src="docs/demo_thumbnail.png" alt="Watch the 80-second demo" width="720"></a>
+
+*Click the image to watch the 80-second demo (voice-over and captions).*
+
+</div>
+
+---
+
+## Contents
+
+[The problem](#the-problem) · [What it does](#what-it-does) · [Quick start](#quick-start) · [How it works](#how-it-works) · [Evaluation](#evaluation) · [Design decisions](#design-decisions) · [Project structure](#project-structure)
 
 ## The problem
 
-A restaurant or online store gets 200 to 500 reviews a week from Google, Zomato, Swiggy and Amazon, in English, Tamil and Tanglish. A manager reads them by hand, urgent complaints (food poisoning, wrong orders, rude staff) get missed for days, and nobody can say with numbers what customers complain about most.
+**PJ's** is a Chettinad kitchen with three outlets in Coimbatore (RS Puram, Gandhipuram and Peelamedu). Every week it gets hundreds of reviews on Google, Zomato and Swiggy, written in English, Tamil and Tanglish (Tamil in English letters). Reading them by hand takes hours, urgent complaints such as food poisoning or a vegetarian sent chicken get missed for days, and nobody can say with numbers what customers complain about most, or which outlet is causing it.
+
+> PJ's is a fictional restaurant and its reviews are synthetic, generated with known patterns so the analysis can be checked against an answer key (see [Evaluation](#evaluation)).
 
 ## What it does
 
-| Feature | Details |
+| | |
 |---|---|
-| **Upload** | CSV with `review_id, date, platform, rating, review_text`; empty and duplicate rows are removed before anything is sent to the LLM |
-| **Tag every review** | sentiment, category, urgency, language, a one-line English summary and a polite suggested reply, enforced by a strict schema |
-| **Mixed languages** | Tamil script and Tanglish reviews are understood and summarised in English |
-| **Weekly report** | top complaints, top praise, clusters of urgent incidents, 3 action items |
-| **Dashboard** | sentiment split, category chart, a **HIGH-urgency filter**, platform/category/sentiment filters |
-| **Export** | enriched CSV that opens correctly in Excel (Tamil text included) |
-| **Demo mode** | explore a pre-computed week without an API key: open the app with `?demo=1` |
+| **Monday briefing**<br>Opens on what needs a decision: the most serious incident, complaints concentrated in one outlet or platform, this week's 3 actions, and an outlet comparison. | <img src="docs/briefing.png" alt="Monday briefing" width="460"> |
+| **Reply queue**<br>Every review in the order a manager should answer it: 1–2★ first, then urgent issues hidden in higher ratings, then 3–4★, then 5★. Each has an AI-drafted reply signed by the right outlet, ready to edit, copy and mark as done. | <img src="docs/reply_queue.png" alt="Reply queue" width="460"> |
+| **Insights**<br>Sentiment and complaint categories for the whole restaurant or one outlet at a time. | <img src="docs/insights.png" alt="Insights" width="460"> |
+| **Weekly report**<br>Top complaints and praise, concentrated complaints, urgent incident clusters and action items. Every number in it is calculated in code. | <img src="docs/weekly_report.png" alt="Weekly report" width="460"> |
 
-## How it works
-
-```
- CSV ──► 1. Validate ──► 2. MAP: tag each review ──► 3. REDUCE (pandas) ──► 4. REDUCE (LLM) ──► 5. Dashboard
-         columns,        LangChain chain, batched     exact counts and        writes the words,     + report
-         empty rows,     8 at a time, retried,        percentages             code inserts the      + CSV export
-         duplicates      strict JSON schema                                   numbers
-```
-
-1. **Validate** ([data.py](reviewlens/data.py)): forgiving about header case and spacing, strict about required columns.
-2. **Map** ([chains.py](reviewlens/chains.py), [analyze.py](reviewlens/analyze.py)): `prompt | llm.with_structured_output(ReviewAnalysis, strict=True)`, run with `chain.batch(max_concurrency=8)`. Every value must be one of the allowed options ([schemas.py](reviewlens/schemas.py)). A review that still fails after 3 attempts is marked `needs_review` instead of crashing the run.
-3. **Reduce, numbers** ([aggregate.py](reviewlens/aggregate.py)): pandas computes every count and percentage, including top complaint themes with their main platform and language.
-4. **Reduce, words** ([report.py](reviewlens/report.py)): one LLM call reads those facts and returns titles, insights, incident clusters and action items. The code assembles the report and inserts every number itself.
-5. **App** ([app.py](app.py)): Streamlit UI with session state, so filtering never re-calls the API.
+Every review is tagged with **sentiment, category, urgency, language, a one-line English summary and a suggested reply**, and the enriched table exports as a CSV that opens correctly in Excel, Tamil text included.
 
 ## Quick start
 
-Requires **Python 3.12** and an OpenAI API key.
+Requires **Python 3.12** and an [OpenAI API key](https://platform.openai.com/api-keys). No key? The app opens on a pre-analysed demo week, so you can explore everything except analysing new data.
 
 ```powershell
 git clone https://github.com/Prithvi11J/reviewlens-feedback-analyzer.git
@@ -48,94 +53,99 @@ py -3.12 -m venv .venv
 .venv\Scripts\activate
 pip install -r requirements.txt
 copy .env.example .env          # then paste your OpenAI key into .env
-python scripts/check_setup.py   # should print [OK]
 streamlit run app.py
 ```
 
-On macOS/Linux use `python3.12 -m venv .venv`, `source .venv/bin/activate` and `cp .env.example .env`.
+<details>
+<summary>macOS / Linux</summary>
 
-No API key? Run the app and click **Explore the demo week**, or open `http://localhost:8501/?demo=1`.
+```bash
+python3.12 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+cp .env.example .env
+streamlit run app.py
+```
+</details>
 
-### Command-line scripts
+Run `streamlit run app.py` **from the project folder**: Streamlit reads the PJ's theme from `.streamlit/config.toml` in the folder it is started from.
 
-| Command | What it does | API cost |
+### Use your own reviews
+
+Open **Analyse a week** and upload a CSV:
+
+| Column | Required | Example |
 |---|---|---|
-| `python scripts/try_one_review.py` | Tags the 3 sample reviews from the brief | 3 calls |
-| `python scripts/run_batch.py [file.csv]` | Validates and tags a whole CSV, saves `outputs/<name>_enriched.csv`, scores accuracy if an answer key exists | 1 call per review |
-| `python scripts/run_batch.py --eval-only` | Re-scores the last run against the answer key | free |
-| `python scripts/show_stats.py` | Prints the exact weekly numbers | free |
-| `python scripts/make_report.py` | Writes `outputs/weekly_report.md` and checks the planted patterns | 1 call |
-| `python scripts/make_test_data.py` | Regenerates the synthetic test week (fixed seed) | free |
+| `review_id` | yes | `R-1042` |
+| `date` | yes | `2026-11-20` |
+| `platform` | yes | `Swiggy` |
+| `rating` | yes | `1` |
+| `review_text` | yes | `Saapadu nalla irundhuchu but bill la extra charge pottanga` |
+| `outlet` | optional | `Peelamedu` (enables outlet comparison and hotspots) |
 
-## Sample input and output
+Empty and duplicate rows are removed before anything is sent to the model. Set `RESTAURANT_NAME` and `RESTAURANT_DESCRIPTION` in `.env` to use ReviewLens for another restaurant.
 
-**Input** (a Tanglish review from the project brief; it means "the food was good, but they added an extra charge to the bill"):
+## How it works
 
-```csv
-review_id,date,platform,rating,review_text
-R-1043,2026-10-04,Google,2,"Saapadu nalla irundhuchu but bill la extra charge pottanga"
+```mermaid
+flowchart LR
+    A[CSV upload] --> B[Validate<br/>columns, empty rows,<br/>duplicates]
+    B --> C[MAP: tag each review<br/>LangChain + strict schema<br/>8 in parallel, retried]
+    C --> D[REDUCE 1: pandas<br/>exact counts, hotspots,<br/>urgent incidents]
+    D --> E[REDUCE 2: one LLM call<br/>titles, insights, actions<br/>no numbers]
+    E --> F[Code assembles report<br/>inserts every number,<br/>flags invented ones]
+    F --> G[Streamlit app<br/>briefing, reply queue,<br/>insights, export]
 ```
 
-**Output A: one analysed review**
-
-```json
-{
-  "review_id": "R-1043",
-  "sentiment": "negative",
-  "category": "price",
-  "urgency": "medium",
-  "language": "Tanglish",
-  "summary": "The customer said the food was good, but extra charges were added to the bill.",
-  "suggested_reply": "Thank you for your feedback. We're glad you liked the food, and we're sorry about the extra charge on the bill. Please share the bill details with us so we can check what happened and clarify it for you."
-}
-```
-
-**Output B: weekly report** (excerpt; full version in [data/demo/weekly_report.md](data/demo/weekly_report.md))
-
-```text
-Weekly Feedback Report | 16 Nov to 22 Nov 2026
-Total reviews: 240   Positive 52% · Neutral 2% · Negative 46%
-
-Top 3 complaints
-1. Late, cold deliveries (31 reviews; mostly Swiggy, 74%)
-2. Spoiled and unsafe food (31 reviews)
-3. Billing and extra charges (19 reviews; mostly Google, 84%; mostly Tanglish reviews, 74%)
-
-⚠️ Urgent: 33 reviews need a reply within 24 hours
-- Fish fry made customers sick: 6 reports, on Fri 20 Nov and Sat 21 Nov. ...
-
-Action items
-1. Investigate the fish fry issue immediately and stop selling that item until the kitchen confirms it is safe.
-```
+1. **Map** ([chains.py](reviewlens/chains.py), [analyze.py](reviewlens/analyze.py)): `prompt | llm.with_structured_output(ReviewAnalysis, strict=True)`, run with `chain.batch(max_concurrency=8)`. Allowed values are `Literal` types in a Pydantic schema ([schemas.py](reviewlens/schemas.py)), so the model cannot return a category that doesn't exist. A review that still fails after 3 attempts is marked `needs_review` instead of crashing the run. 240 reviews take about 45 seconds.
+2. **Reduce, numbers** ([aggregate.py](reviewlens/aggregate.py)): pandas computes every count and percentage, the outlet comparison, and **hotspots**: complaint types concentrated in one outlet, platform or language, kept only when a binomial test says chance would produce them less than 1% of the time.
+3. **Reduce, words** ([report.py](reviewlens/report.py)): one LLM call reads those facts and returns titles, insights, incident clusters and action items. Code checks the result (right themes, real review IDs), assembles the report and inserts every number itself.
+4. **App** ([app.py](app.py), [app_pages/](app_pages)): a multipage Streamlit app themed entirely through `config.toml`, with session state so filtering never calls the API again.
 
 ## Evaluation
 
-The test week ([data/sample](data/sample)) is **synthetic**: 240 reviews generated from hand-written templates (161 English, 63 Tanglish, 16 Tamil script) plus 3 deliberately broken rows, with a separate answer key the LLM never sees. Results with `gpt-5.4-mini`:
+The demo week ([data/sample](data/sample)) has 240 synthetic reviews (162 English, 57 Tanglish, 21 Tamil script) across 3 outlets, plus 3 deliberately broken rows, and a separate **answer key** the model never sees. Results with `gpt-5.4-mini`:
 
-| Field | Accuracy |
+| Tag | Accuracy |
 |---|---|
 | category | 98.3% |
-| sentiment | 98.3% |
-| language | 98.8% |
-| urgency | 99.6% (every truly urgent review caught) |
+| sentiment | 99.2% |
+| language | 99.6% |
+| urgency | **100%** (every truly urgent review caught) |
 
-Most of the remaining misses are genuinely ambiguous, for example *"Portion size has become really small for the same price"* (food quality or price?).
+Most remaining misses are genuinely ambiguous, for example *"Portion of the mutton biryani has become really small for the same price"* (food quality or price?).
 
-**Planted-pattern test.** Three patterns were hidden in the data on purpose. The weekly report found all three:
+**Planted-pattern test.** Four patterns were hidden in the data on purpose. The weekly report found all four:
 
-| Planted | Found in the report |
+| Hidden in the data | Found in the report |
 |---|---|
-| Delivery complaints mostly from Swiggy | "Late, cold deliveries (31 reviews; mostly Swiggy, 74%)" |
-| Extra-charge complaints mostly Tanglish, on Google | "Billing and extra charges (mostly Google, 84%; mostly Tanglish reviews, 74%)" |
-| 6 food-poisoning reports about one dish in 2 days | "Fish fry made customers sick: 6 reports, on Fri 20 Nov and Sat 21 Nov", ranked first |
+| Delivery complaints mostly from Swiggy | "Wrong and missing orders (28 reviews; mostly Swiggy, 79%)" |
+| Billing complaints mostly in Tanglish, on Google | "Price complaints written in Tanglish: 9 of 13 (69%), although Tanglish makes up 24% of all reviews" |
+| 6 food-poisoning reports about one dish at one outlet in 2 days | "Fish fry illness at Peelamedu: 6 reports, on Fri 20 Nov and Sat 21 Nov, all at Peelamedu", ranked first |
+| Every packaging complaint from one outlet | "Packaging complaints at the Peelamedu outlet: 10 of 10 (100%), although Peelamedu gets 34% of all reviews" |
+
+Reproduce it: `python scripts/make_test_data.py`, `python scripts/run_batch.py` (accuracy), `python scripts/make_report.py` (pattern check).
 
 ## Design decisions
 
-- **Numbers come from pandas, words come from the LLM.** The LLM tags reviews and writes the report text. Every count and percentage is calculated in code and inserted by code, so it is exact and repeatable. As a final check, any number in the AI-written text that does not exist in the data is flagged in the report.
-- **Strict "high" urgency.** `high` is reserved for health/safety issues, money taken wrongly, abusive staff, and wrong or missing orders, following the brief's definition table. A late, cold delivery is a clear complaint (`medium`), not an emergency. This keeps the urgent queue short enough that the team actually clears it every day. The model initially over-escalated emotional complaints ("kids slept hungry"), so the prompt now says *judge what happened, not how upset the customer sounds*, with contrastive examples written independently of the test data. Urgency accuracy went from **97.5% to 99.6%**.
-- **A pattern needs at least 50%.** The report only says "mostly Swiggy" when one platform or language makes up at least half of a theme, so random variation is never presented as a finding.
-- **IDs never pass through the LLM.** `review_id` is attached from the input data after analysis, and incident clusters are checked against the real urgent IDs, so an ID can't be mistyped or invented.
-- **The model is swappable.** The LLM is created in one place ([config.py](reviewlens/config.py)); switching to another model or provider changes one function.
+- **Numbers come from code, words come from the LLM.** The model writes titles and insights; every count and percentage is calculated by pandas and inserted by code. Any number in AI-written text that isn't in the data is flagged in a quality check.
+- **Rules in a prompt are requests; rules in code are guarantees.** When the model wrote about a 41% "pattern" despite being told to ignore anything under 50%, the fix was to remove sub-threshold patterns from the facts it sees. When it summarised the wrong theme, the code now checks the themes and asks again.
+- **Patterns must beat chance.** An outlet that gets a third of all reviews will get about a third of each complaint type. Hotspots are compared against that baseline with a binomial test, so "4 of 6" (an 11% fluke) is ignored while "10 of 10" (0.002%) is reported.
+- **Incidents are bursts.** Urgent clusters are ranked by reports per day, so a sudden food-poisoning spike outranks a slow, recurring problem, and the ranking doesn't change between runs.
+- **Strict "high" urgency.** High is reserved for health and safety, money taken wrongly, abusive staff, and wrong or missing orders. A late, cold delivery is a clear complaint, not an emergency, which keeps the urgent queue short enough to clear every day. Telling the model to *judge what happened, not how upset the customer sounds* raised urgency accuracy from 97.5% to 100%.
+- **Built on how restaurants actually work.** The reply order (1–2★ first, then hygiene and illness) and the platform tips (Google replies are public; Swiggy feedback stays in the partner app) follow published guidance for Indian restaurants, such as [Repuva's review-management guide](https://repuva.com/blog/restaurant-review-management-guide/). The briefing is exception-first, like a good [weekly operations review](https://restaurantoperatorlab.com/restaurant-manager-weekly-review-meeting/).
+- **IDs never pass through the LLM.** `review_id` is attached from the input after analysis, and incident clusters are checked against the real urgent IDs.
+
+## Command-line tools
+
+| Command | What it does | API cost |
+|---|---|---|
+| `python scripts/check_setup.py` | Checks the key and model with one tiny call | 1 call |
+| `python scripts/run_batch.py [file.csv]` | Tags a whole CSV, saves `outputs/<name>_enriched.csv`, scores accuracy if an answer key exists | 1 call per review |
+| `python scripts/run_batch.py --eval-only` | Re-scores the last run against the answer key | free |
+| `python scripts/show_stats.py` | Prints the exact weekly numbers | free |
+| `python scripts/make_report.py` | Writes the weekly report and checks the planted patterns | 1–3 calls |
+| `python scripts/make_test_data.py` | Regenerates the synthetic week (fixed seed) | free |
 
 ## Tests
 
@@ -143,36 +153,45 @@ Most of the remaining misses are genuinely ambiguous, for example *"Portion size
 python -m pytest
 ```
 
-26 offline tests run in seconds with no API calls: schema rules, CSV validation, batch failure handling (with a fake chain), exact statistics, percentages that always sum to 100, report assembly, invented-number detection, and a headless smoke test of the Streamlit app.
+56 tests run in about 20 seconds with no API calls: schema rules, CSV validation, batch failure handling with a fake chain, exact statistics, percentages that always sum to 100, hotspots and the chance test, report assembly and retries, invented-number detection, reply-queue order, and headless tests of every app page.
 
 ## Project structure
 
 ```
 reviewlens-feedback-analyzer/
-├── app.py                  # Streamlit app
-├── reviewlens/             # core package
-│   ├── config.py           # loads .env, builds the LLM
-│   ├── schemas.py          # ReviewAnalysis: the 6 fields and their allowed values
+├── app.py                  # Streamlit entry point (frame and navigation)
+├── app_pages/              # briefing, reply queue, insights, reviews, report, upload
+├── ui/state.py             # shared app state and cached stats
+├── reviewlens/             # the analysis package (no Streamlit inside)
+│   ├── config.py           # .env settings, the LLM, restaurant name
+│   ├── schemas.py          # ReviewAnalysis: 6 fields and their allowed values
 │   ├── chains.py           # per-review LangChain chain (map)
 │   ├── data.py             # CSV loading and validation
 │   ├── analyze.py          # batching, retries, needs_review
-│   ├── aggregate.py        # exact weekly statistics (reduce, numbers)
-│   ├── report.py           # report chain, assembly, number check (reduce, words)
-│   └── charts.py           # dashboard charts
-├── scripts/                # command-line tools (see table above)
+│   ├── aggregate.py        # exact statistics, hotspots, outlet stats (reduce: numbers)
+│   ├── report.py           # report chain, checks, assembly (reduce: words)
+│   ├── replies.py          # reply-queue priority
+│   └── charts.py           # colour-blind-safe Plotly charts
+├── scripts/                # command-line tools (see above)
 ├── tests/                  # pytest suite
-├── data/sample/            # synthetic test week + answer key
-├── data/demo/              # pre-computed results for demo mode
-├── docs/                   # README screenshot
-├── .env.example            # template for secrets (.env itself is git-ignored)
+├── data/sample/            # synthetic week + answer key
+├── data/demo/              # pre-analysed results for demo mode
+├── assets/                 # PJ's logo
+├── docs/                   # screenshots and demo video
+├── .streamlit/config.toml  # PJ's theme
+├── .env.example            # settings template (.env itself is git-ignored)
 └── requirements.txt        # pinned dependencies
 ```
 
 ## Limitations and next steps
 
-- The test data is synthetic, and many reviews reuse the same template sentences. Real reviews will be messier.
-- One run costs roughly one small LLM call per review. Results are not cached between runs yet.
-- Ideas from the brief's stretch goals: compare with last week (trend arrows), reply in the review's own language, email the report every Monday. Another idea is an "ask your reviews" search box (RAG over the tagged reviews).
+- The test data is synthetic and reuses template sentences; real reviews are messier. The next step is a week of real (anonymised) reviews.
+- Reply status lasts for the browser session only; the reply log CSV is the workaround. A small database would make it persistent.
+- Ideas: week-over-week trends, replies in the reviewer's own language, a Monday email of the briefing, and an "ask your reviews" search box (RAG over the tagged reviews).
+
+## Acknowledgements
+
+Built as the Gen AI (LangChain) project of the **Social Eagle AI Academy** intermediate track. The demo video's voice-over and music were generated with ElevenLabs.
 
 ## License
 

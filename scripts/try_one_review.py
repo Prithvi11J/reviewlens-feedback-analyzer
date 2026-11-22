@@ -25,7 +25,7 @@ SAMPLES = [
 def main() -> None:
     chain = build_review_chain()
     for review in SAMPLES:
-        analysis = chain.invoke(review)  # extra keys like review_id are simply ignored by the prompt
+        analysis = chain.invoke(review)  # extra keys like review_id are ignored; outlet defaults to "not given"
         # review_id comes from OUR data, not from the LLM, so it can never be mistyped.
         output = {"review_id": review["review_id"], **analysis.model_dump()}
         print(json.dumps(output, indent=2, ensure_ascii=False))

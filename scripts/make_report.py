@@ -20,8 +20,16 @@ DEFAULT = ROOT / "outputs" / "reviews_week47_enriched.csv"
 # The patterns planted by scripts/make_test_data.py, as simple text checks.
 PLANTED_PATTERNS = {
     "1. Delivery complaints mostly Swiggy": lambda md: "mostly Swiggy" in md,
-    "2. Price complaints mostly Tanglish / Google": lambda md: "mostly Tanglish" in md and "mostly Google" in md,
-    "3. Fish-fry food-poisoning spike": lambda md: "fish" in md.lower() and ("poison" in md.lower() or "sick" in md.lower()),
+    # Found either in the top-complaints note ("mostly Google") or as a concentrated complaint ("on Google")
+    "2. Price complaints mostly Tanglish / Google": lambda md: any(
+        "Google" in line and "Tanglish" in md for line in md.splitlines()
+        if ("Price" in line or "price" in line.lower()) and ("mostly Google" in line or "on Google" in line)),
+    # Checks the code-written part of the cluster line ("all at Peelamedu"), not the AI's wording,
+    # which varies between runs ("poisoning", "illness", "sick"...).
+    "3. Fish-fry illness spike at Peelamedu": lambda md: any(
+        "fish" in line.lower() and "all at Peelamedu" in line for line in md.splitlines()),
+    "4. Packaging complaints mostly Peelamedu": lambda md: "Packaging complaints at the Peelamedu outlet" in md
+        or "mostly Peelamedu outlet" in md,
 }
 
 
@@ -32,8 +40,11 @@ def main() -> None:
 
     out = ROOT / "outputs" / "weekly_report.md"
     out.write_text(report.markdown, encoding="utf-8")
+    # The structured version (titles, clusters, actions) feeds the app's briefing cards.
+    insights_out = ROOT / "outputs" / "weekly_insights.json"
+    insights_out.write_text(report.insights.model_dump_json(indent=2), encoding="utf-8")
     print(report.markdown)
-    print(f"\nSaved: {out}")
+    print(f"\nSaved: {out} and {insights_out.name}")
 
     if path == DEFAULT:
         print("\nPlanted-pattern check:")

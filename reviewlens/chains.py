@@ -6,11 +6,11 @@ Stage 1: the per-review classification chain (the MAP step).
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import Runnable
 
-from reviewlens.config import get_llm
+from reviewlens.config import get_llm, get_restaurant_description, get_restaurant_name
 from reviewlens.schemas import ReviewAnalysis
 
 REVIEW_SYSTEM_PROMPT = """\
-You are a customer-feedback analyst for a restaurant and food delivery business in Tamil Nadu.
+You are a customer-feedback analyst for {restaurant}, {restaurant_description}.
 You read one customer review at a time and classify it for the operations team.
 
 Rules:
@@ -29,23 +29,35 @@ Rules:
     "The paneer tasted sour, clearly gone bad" -> high (spoiled food)
     "Waiter called us cheap and laughed at us" -> high (abusive staff)
 - The reply must sound human and specific, never promise compensation,
-  and must not include placeholders like [Name]."""
+  and must not include placeholders like [Name]. Sign it "- Team {restaurant}",
+  adding the outlet name when one is given (e.g. "- Team {restaurant}, RS Puram")."""
 
 REVIEW_HUMAN_PROMPT = """\
 Platform: {platform}
+Outlet: {outlet}
 Star rating: {rating} / 5
 Review: {review_text}"""
 
 
 def build_review_chain() -> Runnable:
     """prompt | model-with-schema  ->  returns a ReviewAnalysis object."""
-    prompt = ChatPromptTemplate.from_messages(
+    # strict=True: OpenAI constrains generation to our JSON schema,
+    # so values outside the Literal lists cannot be produced.
+    structured_llm = get_llm().with_structured_output(ReviewAnalysis, strict=True)
+    return build_review_prompt() | structured_llm
+
+
+def build_review_prompt() -> ChatPromptTemplate:
+    """The prompt on its own, so tests can check it without calling the API."""
+    return ChatPromptTemplate.from_messages(
         [
             ("system", REVIEW_SYSTEM_PROMPT),
             ("human", REVIEW_HUMAN_PROMPT),
         ]
+    ).partial(
+        # .partial() fills variables that are the same for every review.
+        # `outlet` is only a default: a value passed with the review overrides it.
+        restaurant=get_restaurant_name(),
+        restaurant_description=get_restaurant_description(),
+        outlet="not given",
     )
-    # strict=True: OpenAI constrains generation to our JSON schema,
-    # so values outside the Literal lists cannot be produced.
-    structured_llm = get_llm().with_structured_output(ReviewAnalysis, strict=True)
-    return prompt | structured_llm
