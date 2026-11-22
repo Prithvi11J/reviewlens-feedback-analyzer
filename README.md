@@ -192,7 +192,7 @@ reviewlens-feedback-analyzer/
 
 ## Acknowledgements
 
-Built as the Gen AI (LangChain) project of the **Social Eagle AI Academy** intermediate track. The demo video's voice-over and music were generated with ElevenLabs.
+The demo video's voice-over and music were generated with ElevenLabs.
 
 ## License
 
